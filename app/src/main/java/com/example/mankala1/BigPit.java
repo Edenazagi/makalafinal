@@ -13,7 +13,8 @@ public class BigPit extends Pit{
         super(x, y, color, stoneCount);
         this.isone = isone;
         p = new Paint();
-        p.setColor(Color.YELLOW);
+        p.setColor(color);
+
     }
     public void draw(Canvas canvas)
     {

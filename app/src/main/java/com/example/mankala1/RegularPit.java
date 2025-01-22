@@ -1,6 +1,7 @@
 package com.example.mankala1;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 
 public class RegularPit extends Pit{
@@ -27,11 +28,13 @@ public class RegularPit extends Pit{
         p.setTextSize(50);
         p.setTextAlign(Paint.Align.CENTER);
         String stonenum= String.valueOf(stoneCount);
+        p.setColor(Color.BLACK);
         if(istop)
         canvas.drawText(stonenum,x,y - height/18 - 50,p);
 
         else canvas.drawText(stonenum,x,y + height/18 + 60,p);
-
+        p.setColor(color);
+        
 
     }
     public boolean DidUserTouchMe(int xt,int yt){

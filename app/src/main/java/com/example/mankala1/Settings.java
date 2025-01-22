@@ -6,16 +6,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import androidx.activity.result.contract.ActivityResultContracts;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 public class Settings extends AppCompatActivity implements AdapterView.OnItemSelectedListener
 {
     private Spinner spinner;
-    private String[] arrcolor = { "", "Red", "Blue", "Pink", "Yellow"};
+    private String[] arrcolor = {"Select Color", "Red", "Blue", "Pink", "Yellow"};
     private boolean isFirstTime = true;
 
     @Override
@@ -27,12 +29,12 @@ public class Settings extends AppCompatActivity implements AdapterView.OnItemSel
         spinner.setOnItemSelectedListener(this);
 
         ArrayAdapter aa = new ArrayAdapter(this, android.R.layout.simple_spinner_item,arrcolor);
-        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(aa);
+        /*((ArrayAdapter<?>)*/ aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter((SpinnerAdapter) aa);
     }
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        //Toast.makeText(this, "onSelected", Toast.LENGTH_SHORT).show();
+    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+        Toast.makeText(this, "onSelected", Toast.LENGTH_SHORT).show();
         if(isFirstTime == false)
         {
             Intent intent = new Intent();

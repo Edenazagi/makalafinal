@@ -4,6 +4,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import androidx.activity.result.contract.ActivityResultContracts;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -12,18 +13,32 @@ import android.widget.LinearLayout;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     private ImageButton btnplay, btninstructions, btnsettings;
-    private String backgroundColor = "Blue";
+    private int backgroundColor = Color.YELLOW;
     private LinearLayout linearLayout;
+    private String currentColor = "Yellow";
+
 
 
     private ActivityResultLauncher<Intent> activityResultLauncher;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_opening);
         //linearLayout=findViewById(R.)
+        activityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data != null) {
+                            String color = data.getStringExtra("color");
+                            setcolor(color);
+                        }
+                    }
+                }
+        );
         init();
-
     }
     private void init()
     {
@@ -39,43 +54,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         if(v==btninstructions){
             Intent intent = new Intent(this,Instructions.class);
-
             startActivity(intent);
         }
         if (v==btnsettings){
             Intent i = new Intent(this, Settings.class);
             activityResultLauncher.launch(i);
         }
-        if (v==btnplay){
-            Intent i = new Intent(this, GameActivity.class);
-            i.putExtra("color", backgroundColor);
-            startActivity(i);
+        if (v==btnplay) {
+            Intent in = new Intent(this, GameActivity.class);
+            in.putExtra("color", currentColor); // Pass string instead of int
+            startActivity(in);
         }
     }
     public void setcolor(String str) {
-        backgroundColor = str;
-        switch (str)
-        {
+        currentColor = str; // Store the color string
+        switch (str) {
             case "Blue":
-            {
-                linearLayout.setcolor(Color.BLUE);
+                backgroundColor = Color.BLUE;
                 break;
-            }
-
             case "Red":
-            {
-                linearLayout.setcolor(Color.RED);
+                backgroundColor = Color.RED;
                 break;
-            }
-
             case "Pink":
-            {
-                linearLayout.setcolor(Color.argb(255,255,192,203));
-                //linearLayout.setcolor(0xFFFFC0CB);
+                backgroundColor = Color.argb(255,255,192,203);
                 break;
-            }
-
-            default:
+            case "Yellow":
+                backgroundColor = Color.YELLOW;
                 break;
         }
     }

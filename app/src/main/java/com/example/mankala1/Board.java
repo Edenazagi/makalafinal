@@ -26,10 +26,6 @@ public class Board extends View {
     Bitmap background;
     private Context context;
 
-    public void setColor(int color) {
-        this.color = color;
-    }
-
     public Board(Context context, int color) {
         super(context);
         this.context = context;
@@ -38,6 +34,10 @@ public class Board extends View {
         whoplay=true;//true=bottom, false=top
         whoplays="player 1";
         this.color=color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
     }
 
     @Override
