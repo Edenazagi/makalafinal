@@ -5,13 +5,17 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 
+import java.util.ArrayList;
+
 public abstract class Pit extends Position{
     protected int  color;
     protected int stoneCount;
     private Paint p;
+    ArrayList<Stone> arrayList;
 
     public Pit(int x, int y, int color, int stoneCount) {
         super(x, y);
+        arrayList = new ArrayList<>();
         this.color = color;
         this.stoneCount = stoneCount;
         p=new Paint();
@@ -24,6 +28,9 @@ public abstract class Pit extends Position{
         return k;
     }
     public void draw(Canvas canvas) {
+        for (int i = 0; i < arrayList.size(); i++) {
+            arrayList.get(i).draw(canvas);
+        }
     }
 
 

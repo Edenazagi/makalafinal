@@ -1,6 +1,8 @@
 package com.example.mankala1;
 
-public class Position
+import android.graphics.Canvas;
+
+public abstract class Position
 {
     protected int x,y;
 
@@ -16,4 +18,6 @@ public class Position
     public int getY() {
         return y;
     }
+
+    public abstract void draw(Canvas canvas);
 }

@@ -85,7 +85,7 @@ public class Board extends View {
     private void drawBoard(Canvas canvas)
     {
         int a= (int) ((height/20)/2);
-        float smallrad= (float) (a*0.6);
+        float smallrad= (int) (a*0.6);
         int x,y;
 
         canvas.drawBitmap(background,0,0,null);
@@ -102,24 +102,32 @@ public class Board extends View {
             for (int j = 0; j < 6; j++)
             {
                 if(i==0){
+
                     x= top[j].getX();
                     y=top[j].getY()+a;
-                    canvas.drawCircle((float) x,(float) y,smallrad,new Paint());
+                    Stone s=new Stone(context, x,y, (int) smallrad);
+                    s.draw(canvas);
                 }
-                if(i==1){
+                if(i==1)
+                {
                     x= top[j].getX()-a;
                     y=top[j].getY();
-                    canvas.drawCircle((float) x,(float) y,smallrad,new Paint());
+                    Stone s=new Stone(context, x,y, (int) smallrad);
+                    s.draw(canvas);
                 }
-                if(i==2){
+                if(i==2)
+                {
                     x= top[j].getX()+a;
                     y=top[j].getY();
-                    canvas.drawCircle((float) x,(float) y,smallrad,new Paint());
+                    Stone s=new Stone(context, x,y, (int) smallrad);
+                    s.draw(canvas);
                 }
-                if(i==3){
+                if(i==3)
+                {
                     x= top[j].getX();
                     y=top[j].getY()-a;
-                    canvas.drawCircle((float) x,(float) y,smallrad,new Paint());
+                    Stone s=new Stone(context, x,y, (int) smallrad);
+                    s.draw(canvas);
                 }
 
 
@@ -132,22 +140,26 @@ public class Board extends View {
                 if(i==0){
                     x= bottom[j].getX();
                     y=bottom[j].getY()+a;
-                    canvas.drawCircle((float) x,(float) y,smallrad,new Paint());
+                    Stone s=new Stone(context, x,y, (int) smallrad);
+                    s.draw(canvas);
                 }
                 if(i==1){
                     x= bottom[j].getX()-a;
                     y=bottom[j].getY();
-                    canvas.drawCircle((float) x,(float) y,smallrad,new Paint());
+                    Stone s=new Stone(context, x,y, (int) smallrad);
+                    s.draw(canvas);
                 }
                 if(i==2){
                     x= bottom[j].getX()+a;
                     y=bottom[j].getY();
-                    canvas.drawCircle((float) x,(float) y,smallrad,new Paint());
+                    Stone s=new Stone(context, x,y, (int) smallrad);
+                    s.draw(canvas);
                 }
                 if(i==3){
                     x= bottom[j].getX();
                     y=bottom[j].getY()-a;
-                    canvas.drawCircle((float) x,(float) y,smallrad,new Paint());
+                    Stone s=new Stone(context, x,y, (int) smallrad);
+                    s.draw(canvas);
                 }
 
 
