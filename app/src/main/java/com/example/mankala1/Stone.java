@@ -16,7 +16,7 @@ public class Stone extends Position{
 
     public Stone(Context context, int x, int y,int rad) {
         super(x, y);
-        //2302
+        //23
         this.rad=rad;
         bitmaparr=new Bitmap[9];
         bitmaparr[0]=BitmapFactory.decodeResource(context.getResources() ,R.drawable.green2stone);
