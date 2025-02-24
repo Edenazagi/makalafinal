@@ -39,7 +39,7 @@ public class Stone extends Position{
         bitmaparr[8]=Bitmap.createScaledBitmap(bitmaparr[8],rad*2,rad*2,true);
         Random rand = new Random();
         n = rand.nextInt(8);
-
+        //
     }
 
     @Override
