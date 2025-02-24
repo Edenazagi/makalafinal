@@ -21,7 +21,10 @@ public abstract class Pit extends Position{
         p=new Paint();
         p.setColor(color);
     }
-
+    public void addtolist(Stone stone)
+    {
+        arrayList.add(stone);
+    }
     public int remove(){
         int k=this.stoneCount;
         this.stoneCount=0;
@@ -33,7 +36,9 @@ public abstract class Pit extends Position{
         }
     }
 
-
+    public ArrayList<Stone> getArrayList() {
+        return arrayList;
+    }
 
     public void setStoneCount(int stoneCount) {
         this.stoneCount = stoneCount;

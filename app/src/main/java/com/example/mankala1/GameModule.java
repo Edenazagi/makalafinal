@@ -11,15 +11,13 @@ public class GameModule {
     {
             int hand=arr1[i].getStoneCount();
             int last=arr1[i].getStoneCount()+i;
-            if(last<=6-i)
+            if(last<6&&arr2[Mool(last)].getStoneCount()>0&&arr1[last].getStoneCount()==0)
             {
-                if(0 == arr1[last].getStoneCount())
-                {
-                    int a=arr1[6].getStoneCount();
-                    arr1[6].setStoneCount(a + arr2[Mool(last)].getStoneCount());
-                    arr2[Mool(last)].setStoneCount(0);
-                }
-
+                int a=arr2[Mool(last)].getStoneCount();
+                arr2[Mool(last)].setStoneCount(0);
+                arr1[last].setStoneCount(0);
+                arr1[6].setStoneCount(a + 1);
+                hand--;
             }
         arr1[i].setStoneCount(0);
             for (int j = i +1; j <=5; j++) {
@@ -39,15 +37,13 @@ public class GameModule {
     {
         int hand=arr1[i].getStoneCount();
         int last=arr2[i].getStoneCount()+i;
-        if(last<=6-i)
+        if(last<6&&arr1[Mool(last)].getStoneCount()>0&&arr2[last].getStoneCount()==0)
         {
-            if(0 == arr2[last].getStoneCount())
-            {
-                int a=arr2[6].getStoneCount();
-                arr2[6].setStoneCount(a + arr1[Mool(last)].getStoneCount());
-                arr1[Mool(last)].setStoneCount(0);
-            }
-
+            int a=arr1[Mool(last)].getStoneCount();
+            arr1[Mool(last)].setStoneCount(0);
+            arr2[last].setStoneCount(0);
+            arr2[6].setStoneCount(a + 1);
+            hand--;
         }
         arr1[i].setStoneCount(0);
         for (int j = i +1; j <=5; j++) {
@@ -59,10 +55,8 @@ public class GameModule {
             arr1[6].setStoneCount(arr1[6].getStoneCount() + 1);
         hand--;
         for (int j = 0; j < hand; j++) {
-            arr2[j].setStoneCount(arr2[j].getStoneCount() +1);
+            arr1[j].setStoneCount(arr1[j].getStoneCount() +1);
         }
-        if(this.IsWon(arr1,arr2))
-        {}
 
     }
     public boolean IsWon(Pit[]arr1,Pit[]arr2)

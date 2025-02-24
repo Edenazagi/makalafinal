@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import java.util.Random;
+
 public class Board extends View {
     private Pit [] top;
     private Pit [] bottom;
@@ -21,7 +23,7 @@ public class Board extends View {
     private boolean firstTime = true;
     private int color;
     private int height,width;
-    private boolean whoplay;
+    private boolean whoplay,firsttime2;
     private String whoplays;
     Bitmap background;
     private Context context;
@@ -34,6 +36,7 @@ public class Board extends View {
         whoplay=true;//true=bottom, false=top
         whoplays="player 1";
         this.color=color;
+        firsttime2=true;
     }
 
     public void setColor(int color) {
@@ -87,13 +90,14 @@ public class Board extends View {
         int a= (int) ((height/20)/2);
         float smallrad= (int) (a*0.6);
         int x,y;
-
         canvas.drawBitmap(background,0,0,null);
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 6; i++)
+        {
             top[i].draw(canvas);
         }//צייר של הגומחות העליונות
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 6; i++)
+        {
             bottom[i].draw(canvas);
         }//צייר של הגומחות התחתונות
 
@@ -102,35 +106,36 @@ public class Board extends View {
             for (int j = 0; j < 6; j++)
             {
                 if(i==0){
-
                     x= top[j].getX();
                     y=top[j].getY()+a;
-                    Stone s=new Stone(context, x,y, (int) smallrad);
+                    Stone s=new Stone(context, x,y, (int) smallrad,0);
+                    top[i].addtolist(s);
                     s.draw(canvas);
                 }
                 if(i==1)
                 {
                     x= top[j].getX()-a;
                     y=top[j].getY();
-                    Stone s=new Stone(context, x,y, (int) smallrad);
+                    Stone s=new Stone(context, x,y, (int) smallrad,0);
+                    top[i].addtolist(s);
                     s.draw(canvas);
                 }
                 if(i==2)
                 {
                     x= top[j].getX()+a;
                     y=top[j].getY();
-                    Stone s=new Stone(context, x,y, (int) smallrad);
+                    Stone s=new Stone(context, x,y, (int) smallrad,0);
+                    top[i].addtolist(s);
                     s.draw(canvas);
                 }
                 if(i==3)
                 {
                     x= top[j].getX();
                     y=top[j].getY()-a;
-                    Stone s=new Stone(context, x,y, (int) smallrad);
+                    Stone s=new Stone(context, x,y, (int) smallrad,0);
+                    top[i].addtolist(s);
                     s.draw(canvas);
                 }
-
-
             }
         }//צייר אבנים למעלה
         for (int i = 0; i < 4; i++) {
@@ -140,32 +145,34 @@ public class Board extends View {
                 if(i==0){
                     x= bottom[j].getX();
                     y=bottom[j].getY()+a;
-                    Stone s=new Stone(context, x,y, (int) smallrad);
+                    Stone s=new Stone(context, x,y, (int) smallrad,1);
+                    bottom[i].addtolist(s);
                     s.draw(canvas);
                 }
                 if(i==1){
                     x= bottom[j].getX()-a;
                     y=bottom[j].getY();
-                    Stone s=new Stone(context, x,y, (int) smallrad);
+                    Stone s=new Stone(context, x,y, (int) smallrad,1);
+                    bottom[i].addtolist(s);
                     s.draw(canvas);
                 }
                 if(i==2){
                     x= bottom[j].getX()+a;
                     y=bottom[j].getY();
-                    Stone s=new Stone(context, x,y, (int) smallrad);
+                    Stone s=new Stone(context, x,y, (int) smallrad,1);
+                    bottom[i].addtolist(s);
                     s.draw(canvas);
                 }
                 if(i==3){
                     x= bottom[j].getX();
                     y=bottom[j].getY()-a;
-                    Stone s=new Stone(context, x,y, (int) smallrad);
+                    Stone s=new Stone(context, x,y, (int) smallrad,1);
+                    bottom[i].addtolist(s);
                     s.draw(canvas);
                 }
-
-
             }
         }//צייר אבנים למטה
-
+        this.firsttime2=false;
         top[6].draw(canvas);
         bottom[6].draw(canvas);
         Paint paint=new Paint();
@@ -173,7 +180,6 @@ public class Board extends View {
         paint.setTextSize(100);
         paint.setFakeBoldText(true);
         canvas.drawText(whoplays,canvas.getWidth()/2,canvas.getHeight()/2,paint);
-
     }
 
     @Override
@@ -184,9 +190,8 @@ public class Board extends View {
         if(event.getAction() != MotionEvent.ACTION_DOWN)
             return true;
 
-        int a=0;
-        float radus=height/20;
-        int old = 0,i=0;
+        int i=0;
+        int step=1;
         if (whoplay == true){//אם המשתמש העליון משחק
             whoplays="player 1";
             for ( i = 0; i < 6; i++) {
@@ -196,6 +201,11 @@ public class Board extends View {
                     if (top[i].DidUserTouchMe((int) event.getX(), (int) event.getY()))
                     {
                         play.Turn1(top,bottom,i);
+                        for(int m=0;m<top[i].getArrayList().size();m++)
+                        {
+                            top[i].getArrayList().get(m).move(step);
+                            step++;
+                        }
                         invalidate();
                         if(i==6-x)
                         {
