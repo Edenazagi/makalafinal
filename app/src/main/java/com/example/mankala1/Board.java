@@ -8,6 +8,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.media.Image;
+import android.os.Handler;
+import android.os.Message;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
@@ -27,6 +29,11 @@ public class Board extends View {
     private String whoplays;
     Bitmap background;
     private Context context;
+    public Handler handler;
+    private ThreadGame threadGame;
+    private Stone stone;
+    private boolean firstTimeDrawBoard = true;
+    ///////////////////////////////////////
 
     public Board(Context context, int color) {
         super(context);
@@ -37,6 +44,25 @@ public class Board extends View {
         whoplays="player 1";
         this.color=color;
         firsttime2=true;
+
+        handler = new Handler(
+                new Handler.Callback() {
+                    @Override
+                    public boolean handleMessage(@NonNull Message msg) {
+                        // This method will call invalidate() on its parent View
+                        // which will trigger a redraw
+                        if (msg.what == 0) {
+                            if(stone != null)
+                                stone.updateDxDy(20,20);
+                            invalidate();
+                        }
+                        return false;
+                    }
+                }
+        );
+
+        threadGame = new ThreadGame();
+        threadGame.start();  // runs as thread the run() method
     }
 
     public void setColor(int color) {
@@ -87,9 +113,90 @@ public class Board extends View {
 
     private void drawBoard(Canvas canvas)
     {
-        int a= (int) ((height/20)/2);
-        float smallrad= (int) (a*0.6);
-        int x,y;
+        if(firstTimeDrawBoard)
+        {
+
+            int a= (int) ((height/20)/2);
+            float smallrad= (int) (a*0.6);
+            int x,y;
+            for (int i = 0; i < 4; i++) {
+
+                for (int j = 0; j < 6; j++)
+                {
+                    if(i==0){
+                        x= top[j].getX();
+                        y=top[j].getY()+a;
+                        Stone s=new Stone(context, x,y, (int) smallrad,0);
+                        top[i].addtolist(s);
+                    }
+                    if(i==1)
+                    {
+                        x= top[j].getX()-a;
+                        y=top[j].getY();
+                        Stone s=new Stone(context, x,y, (int) smallrad,0);
+                        top[i].addtolist(s);
+                    }
+                    if(i==2)
+                    {
+                        x= top[j].getX()+a;
+                        y=top[j].getY();
+                        Stone s=new Stone(context, x,y, (int) smallrad,0);
+                        top[i].addtolist(s);
+                    }
+                    if(i==3)
+                    {
+                        x= top[j].getX();
+                        y=top[j].getY()-a;
+                        Stone s=new Stone(context, x,y, (int) smallrad,0);
+                        top[i].addtolist(s);
+                    }
+                }
+            }//צייר אבנים למעלה
+            for (int i = 0; i < 4; i++) {
+
+                for (int j = 0; j < 6; j++)
+                {
+                    if(i==0){
+                        x= bottom[j].getX();
+                        y=bottom[j].getY()+a;
+                        Stone s=new Stone(context, x,y, (int) smallrad,1);
+                        bottom[i].addtolist(s);
+                    }
+                    if(i==1){
+                        x= bottom[j].getX()-a;
+                        y=bottom[j].getY();
+                        Stone s=new Stone(context, x,y, (int) smallrad,1);
+                        bottom[i].addtolist(s);
+                    }
+                    if(i==2){
+                        x= bottom[j].getX()+a;
+                        y=bottom[j].getY();
+                        Stone s=new Stone(context, x,y, (int) smallrad,1);
+                        bottom[i].addtolist(s);
+                    }
+                    if(i==3){
+                        x= bottom[j].getX();
+                        y=bottom[j].getY()-a;
+                        Stone s=new Stone(context, x,y, (int) smallrad,1);
+                        bottom[i].addtolist(s);
+                    }
+                }
+            }//צייר אבנים למטה
+            for (int i = 0; i < top.length; i++) {
+                for(int j=0;j<top[i].getArrayList().size();i++){
+                    top[i].getArrayList().get(j).draw(canvas);
+                }
+            }
+            for (int i = 0; i < bottom.length; i++) {
+                for(int j=0;j<bottom[i].getArrayList().size();i++){
+                    bottom[i].getArrayList().get(j).draw(canvas);
+                }
+            }
+            firstTimeDrawBoard = false;
+        }
+
+
+
         canvas.drawBitmap(background,0,0,null);
 
         for (int i = 0; i < 6; i++)
@@ -101,78 +208,7 @@ public class Board extends View {
             bottom[i].draw(canvas);
         }//צייר של הגומחות התחתונות
 
-        for (int i = 0; i < 4; i++) {
 
-            for (int j = 0; j < 6; j++)
-            {
-                if(i==0){
-                    x= top[j].getX();
-                    y=top[j].getY()+a;
-                    Stone s=new Stone(context, x,y, (int) smallrad,0);
-                    top[i].addtolist(s);
-                    s.draw(canvas);
-                }
-                if(i==1)
-                {
-                    x= top[j].getX()-a;
-                    y=top[j].getY();
-                    Stone s=new Stone(context, x,y, (int) smallrad,0);
-                    top[i].addtolist(s);
-                    s.draw(canvas);
-                }
-                if(i==2)
-                {
-                    x= top[j].getX()+a;
-                    y=top[j].getY();
-                    Stone s=new Stone(context, x,y, (int) smallrad,0);
-                    top[i].addtolist(s);
-                    s.draw(canvas);
-                }
-                if(i==3)
-                {
-                    x= top[j].getX();
-                    y=top[j].getY()-a;
-                    Stone s=new Stone(context, x,y, (int) smallrad,0);
-                    top[i].addtolist(s);
-                    s.draw(canvas);
-                }
-            }
-        }//צייר אבנים למעלה
-        for (int i = 0; i < 4; i++) {
-
-            for (int j = 0; j < 6; j++)
-            {
-                if(i==0){
-                    x= bottom[j].getX();
-                    y=bottom[j].getY()+a;
-                    Stone s=new Stone(context, x,y, (int) smallrad,1);
-                    bottom[i].addtolist(s);
-                    s.draw(canvas);
-                }
-                if(i==1){
-                    x= bottom[j].getX()-a;
-                    y=bottom[j].getY();
-                    Stone s=new Stone(context, x,y, (int) smallrad,1);
-                    bottom[i].addtolist(s);
-                    s.draw(canvas);
-                }
-                if(i==2){
-                    x= bottom[j].getX()+a;
-                    y=bottom[j].getY();
-                    Stone s=new Stone(context, x,y, (int) smallrad,1);
-                    bottom[i].addtolist(s);
-                    s.draw(canvas);
-                }
-                if(i==3){
-                    x= bottom[j].getX();
-                    y=bottom[j].getY()-a;
-                    Stone s=new Stone(context, x,y, (int) smallrad,1);
-                    bottom[i].addtolist(s);
-                    s.draw(canvas);
-                }
-            }
-        }//צייר אבנים למטה
-        this.firsttime2=false;
         top[6].draw(canvas);
         bottom[6].draw(canvas);
         Paint paint=new Paint();
@@ -200,13 +236,27 @@ public class Board extends View {
                 if(event.getAction()==MotionEvent.ACTION_DOWN){
                     if (top[i].DidUserTouchMe((int) event.getX(), (int) event.getY()))
                     {
-                        play.Turn1(top,bottom,i);
-                        for(int m=0;m<top[i].getArrayList().size();m++)
-                        {
-                            top[i].getArrayList().get(m).move(step);
-                            step++;
-                        }
-                        invalidate();
+                            // For each stone in the selected pit
+                            for (int m = 0; m < top[i].getArrayList().size(); m++) {
+                                Pit destinationPit = top[i+1]; // Determine based on your game logic
+                                stone = top[i].getArrayList().get(m);
+
+                                // Calculate destination position
+                                int destX = destinationPit.getX();
+                                int destY = destinationPit.getY();
+
+                                // Set small random offset so stones don't stack perfectly
+                                destX += (new Random().nextInt(21) - 10);
+                                destY += (new Random().nextInt(21) - 10);
+
+                                // Tell the stone to move there
+                                stone.moveTo(destX, destY);
+                                step++;
+                            }
+
+                            play.Turn1(top, bottom, i);
+                            invalidate();
+
                         if(i==6-x)
                         {
                             whoplay=true;
@@ -257,5 +307,23 @@ public class Board extends View {
     private void createDialog() {
         CustomDialogFinish customDialog = new CustomDialogFinish(context);
         customDialog.show();
+    }
+
+
+    private class ThreadGame extends Thread {
+        public void run() {
+            super.run();
+            while (true) {
+                try {
+                    sleep(40);  // 25 FPS animation
+                    // Send message to update position
+                    handler.sendEmptyMessage(0);
+
+                } catch (InterruptedException e) {
+                    // Handle interruption gracefully
+                    break;
+                }
+            }
+        }
     }
 }
